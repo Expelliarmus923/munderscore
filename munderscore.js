@@ -148,6 +148,11 @@
     _.isFunction=function(object){
         return typeof object=='function';
     }
+    _.isEmpty=function(obj){
+        if(obj==null) return true;
+        if(_.isArray(obj)) return obj.length===0;
+        return _.keys(obj).length===0;
+    }
     _.isMatch=function(obj,attr){
         var keys= _.keys(attr),length=keys.length;
         if(obj==null)return !length;
@@ -265,11 +270,94 @@
     }
     _.every=function(list,predicate,context){
     predicate=isContent(predicate,context);
-    if(arrayLike(list)&&Array.prototype.filter) return list.every(predicate);
-
-}
-_.some=function(list,predicate,context){
+     if(arrayLike(list)&&Array.prototype.filter) return list.every(predicate);
+        var keys=!list.length&& _.keys(list),
+            length=(keys||list).length;
+        for(var index=0;index<length;index++){
+            var iCurrIndex=keys?keys[index]:index;
+           if(!predicate(list[iCurrIndex],iCurrIndex,list)) {
+               return false;
+           }
+        }
+        return true;
+    }
+    _.some=function(list,predicate,context){
     predicate=isContent(predicate,context);
     if(arrayLike(list)&&Array.prototype.filter) return list.some(predicate);
+    var keys=!list.length&& _.keys(list),
+        length=(keys||list).length;
+    for(var index=0;index<length;index++){
+        var iCurrIndex=keys?keys[index]:index;
+        if(predicate(list[iCurrIndex],iCurrIndex,list)){
+            return true;
+        }
+    }
+    return false;
 
 }
+    _.pluck=function(list, propertyName){
+        var keys=_.keys(list),result=[]
+        console.log(keys);
+        for(var index=0;index<keys.length;index++){
+            var currentKey=list[index], subkeys= _.keys(currentKey);
+            for(var value in subkeys){
+                if(subkeys[value]==propertyName){
+                    result.push(currentKey[propertyName]);
+                }
+            }
+        }
+        return result;
+    }
+//数组方法 arry
+    //返回array（数组）的第一个元素。传递 n参数将返回数组中从第一个元素开始的n个元素
+    _.first=function(list,n){
+        if(list==null) return void 0;
+        if(n==null) return list[0];
+        return Array.prototype.slice.call(list,0,n);
+    }
+    //返回数组中除了最后一个元素外的其他全部元素。
+    _.initial=function(list , n){
+        return Array.prototype.slice.call(list,0,Math.max(0,list.length-(n==null?1:n)));
+    }
+    //返回array（数组）的最后一个元素。传递 n参数将返回数组中从最后一个元素开始的n个元素
+    _.last=function(list,n){
+        if(list==null) return void 0;
+        if(n==null) return list[list.length-1];
+        return Array.prototype.slice.call(list,list.length-n);
+    }
+    //返回数组中除了第一个元素外的其他全部元素。传递 index 参数将返回从index开始的剩余所有元素 。
+    _.rest=function(list,index){
+        if(list==null) return void 0;
+        return Array.prototype.slice.call(list,(index==null?1:index));
+    }
+    //返回一个除去所有false值的 array副本。 在javascript中, false, null, 0, "", undefined 和 NaN 都是false值.
+    _.compact=function(list){
+        return _.filter(list,function(value){return value});
+    }
+//已数组的形式返回argument是number的参数
+    var restArguments=function(){
+        var result=[];
+            for(var index=0;index<arguments.length;index++){
+                if(typeof arguments[index]=='number'){
+                result.push(arguments[index]);
+                }
+            }
+        return result;
+    }
+    _.without=function(list){
+        var values=restArguments.apply(this,arguments);
+        return _.difference(list,values);
+    }
+    _.difference=function(list,values){
+      return  _.filter(list,function(item){
+            for(var index=0;index<values.length;index++){
+             if(item===values[index])
+             return false;
+            }
+          return true;
+        });
+    }
+    _.union=function(){}
+    _.intersection=function(){}
+    _.uniq=function(){}
+    _.zip=function(){}

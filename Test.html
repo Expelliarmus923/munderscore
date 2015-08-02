@@ -24,8 +24,19 @@
                 reason: "For its public service in publishing in full so many official reports,documents and speeches by European statesmen relating to the progress andconduct of the war."}]
             console.log(_.findWhere(publicServicePulitzers, {newsroom: "The New York Times"}))
             var testArr=[2,4,6,8];
-            console.log(_.every(testArr,function(item){return item%3==0}))
-            console.log(_.some(testArr,function(item){return item%3==0}))
+            console.log(_.every(testArr,function(item){return item%2==0}))
+            console.log(_.some(testArr,function(item){return item%9==0}))
+            var stooges = [{name: 'moe', age: 40}, {name: 'larry', age: 50}, {name: 'curly', age: 60}];
+            console.log(_.pluck(stooges,'name'));
+            console.log(_.isEmpty({1:null}));
+            console.log(_.isEmpty([]));
+            console.log(_.first(testArr));
+            console.log(_.initial(testArr));
+            console.log(_.last([5, 4, 3, 2, 1],1));
+            console.log(_.rest([5, 4, 3, 2, 1],3));
+            console.log(_.compact([0, 1, false, 2, '', 3]));
+            console.log( _.difference([5, 4, 3, 2, 1],[5, 4, 3, 2]));
+            console.log( _.without([5, 4, 3, 2, 1],5, 4, 3, 2));
         }
     </script>
 </head>
